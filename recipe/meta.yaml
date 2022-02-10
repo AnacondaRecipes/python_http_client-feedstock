@@ -1,7 +1,7 @@
 {% set name = "python_http_client" %}
-{% set version = "3.3.2" %}
+{% set version = "3.3.6" %}
 {% set file_ext = "tar.gz" %}
-{% set hash_value = "67e6a7bea19b03e14dc971480d3531b80becfc203d6c69478561bf7844d52661" %}
+{% set hash_value = "7d621aef781b66e1cfe942a9cd4fa5ad86d3ecd4d5d8110d3c75b3175d71fe38" %}
 
 package:
   name: '{{ name|lower }}'
