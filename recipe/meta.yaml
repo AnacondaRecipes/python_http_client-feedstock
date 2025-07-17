@@ -49,6 +49,8 @@ test:
   imports:
     - python_http_client
   commands:
+    - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
     - pytest -vv {{ skip_tests }} tests
 
 about:
