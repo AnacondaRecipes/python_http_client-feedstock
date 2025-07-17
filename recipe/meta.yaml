@@ -6,7 +6,6 @@ package:
   version: '{{ version }}'
 
 source:
-  #url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   url: https://github.com/sendgrid/{{ name.replace('_', '-') }}/archive/refs/tags/{{ version }}.tar.gz
   sha256: 4b87ce2dbebae18e21453ac1b8c7ea31ef3139c94decc85ff5a07d4203671c56
 
@@ -19,6 +18,7 @@ requirements:
   host:
     - python
     - pip
+    - wheels
   run:
     - python
 
