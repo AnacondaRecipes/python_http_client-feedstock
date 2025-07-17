@@ -6,8 +6,9 @@ package:
   version: '{{ version }}'
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: bf841ee45262747e00dec7ee9971dfb8c7d83083f5713596488d67739170cea0
+  #url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  url: https://github.com/sendgrid/{{ name.replace('_', '-') }}/archive/refs/tags/{{ version }}.tar.gz
+  sha256: 4b87ce2dbebae18e21453ac1b8c7ea31ef3139c94decc85ff5a07d4203671c56
 
 build:
   skip: true  # [py<34 or py>310]
@@ -21,9 +22,34 @@ requirements:
   run:
     - python
 
+  {% set skip_tests = "" %}
+  # Broken test: Compares current machine time with copyright notice's old year
+  {% set skip_tests = skip_tests + " --deselect=tests/test_daterange.py::DateRangeTest::test__daterange" %}
+
 test:
+  source_files:
+    - tests
+    # Required for tests/test_repofiles.py::RepoFiles::test_file_existence
+    - LICENSE
+    - Dockerfile
+    - CHANGELOG.md
+    - CODE_OF_CONDUCT.md
+    - CONTRIBUTING.md
+    - ISSUE_TEMPLATE.md
+    - PULL_REQUEST_TEMPLATE.md
+    - README.rst
+    - TROUBLESHOOTING.md
+    - USAGE.md
+    - VERSION.txt
+    - ./docker-compose.yml
+    - .env_sample
+    - .gitignore
+  requires:
+    - pytest
   imports:
     - python_http_client
+  commands:
+    - pytest -vv {{ skip_tests }} tests
 
 about:
   home: https://github.com/sendgrid/sendgrid-python/
