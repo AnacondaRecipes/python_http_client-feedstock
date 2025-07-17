@@ -56,12 +56,12 @@ test:
     - pytest -vv {{ skip_tests }} tests
 
 about:
-  home: https://github.com/sendgrid/sendgrid-python
+  home: https://sendgrid.com
   license: MIT
   license_family: MIT
   license_file: LICENSE
-  summary: "SendGrid's Python HTTP Client for calling APIs"
-  description: "Quickly and easily access any RESTful or RESTful-like API"
+  summary: Twilio SendGrid's Python HTTP Client for calling APIs
+  description: Quickly and easily access any RESTful or RESTful-like API
   doc_url: https://github.com/sendgrid/python-http-client
   dev_url: https://github.com/sendgrid/python-http-client
 
