@@ -45,6 +45,8 @@ test:
     - .env_sample
     - .gitignore
   requires:
+    - python
+    - pip
     - pytest
   imports:
     - python_http_client
@@ -54,15 +56,14 @@ test:
     - pytest -vv {{ skip_tests }} tests
 
 about:
-  home: https://github.com/sendgrid/sendgrid-python/
+  home: https://github.com/sendgrid/sendgrid-python
   license: MIT
   license_family: MIT
-  # https://github.com/sendgrid/python-http-client/pull/87
-  license_file: '{{ environ["RECIPE_DIR"] }}/LICENSE.txt'
+  license_file: LICENSE
   summary: "SendGrid's Python HTTP Client for calling APIs"
   description: "Quickly and easily access any RESTful or RESTful-like API"
-  doc_url: 'https://github.com/sendgrid/python-http-client'
-  dev_url: 'https://github.com/sendgrid/python-http-client'
+  doc_url: https://github.com/sendgrid/python-http-client
+  dev_url: https://github.com/sendgrid/python-http-client
 
 extra:
   recipe-maintainers:
