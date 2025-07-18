@@ -10,7 +10,7 @@ source:
   sha256: 4b87ce2dbebae18e21453ac1b8c7ea31ef3139c94decc85ff5a07d4203671c56
 
 build:
-  skip: true  # [py<34 or py>310]
+  skip: true  # [py<34]
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vvv
 
@@ -18,6 +18,7 @@ requirements:
   host:
     - python
     - pip
+    - setuptools
     - wheel
   run:
     - python
@@ -25,25 +26,12 @@ requirements:
   {% set skip_tests = "" %}
   # Broken test: Compares current machine time with copyright notice's old year
   {% set skip_tests = skip_tests + " --deselect=tests/test_daterange.py::DateRangeTest::test__daterange" %}
+  # Test is pointless for packaging, it only checks for presence of repo files (readme, etc).
+  {% set skip_tests = skip_tests + " --deselect=tests/test_repofiles.py::RepoFiles::test_file_existence" %}
 
 test:
   source_files:
     - tests
-    # Required for tests/test_repofiles.py::RepoFiles::test_file_existence
-    - LICENSE
-    - Dockerfile
-    - CHANGELOG.md
-    - CODE_OF_CONDUCT.md
-    - CONTRIBUTING.md
-    - ISSUE_TEMPLATE.md
-    - PULL_REQUEST_TEMPLATE.md
-    - README.rst
-    - TROUBLESHOOTING.md
-    - USAGE.md
-    - VERSION.txt
-    - ./docker-compose.yml
-    - .env_sample
-    - .gitignore
   requires:
     - python
     - pip
