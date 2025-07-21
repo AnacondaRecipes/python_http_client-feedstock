@@ -1,42 +1,57 @@
 {% set name = "python_http_client" %}
-{% set version = "3.3.2" %}
-{% set file_ext = "tar.gz" %}
-{% set hash_value = "67e6a7bea19b03e14dc971480d3531b80becfc203d6c69478561bf7844d52661" %}
+{% set version = "3.3.7" %}
 
 package:
   name: '{{ name|lower }}'
   version: '{{ version }}'
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: '{{ hash_value }}'
+  url: https://github.com/sendgrid/{{ name.replace('_', '-') }}/archive/refs/tags/{{ version }}.tar.gz
+  sha256: 4b87ce2dbebae18e21453ac1b8c7ea31ef3139c94decc85ff5a07d4203671c56
 
 build:
+  skip: true  # [py<34]
   number: 0
-  noarch: python
-  script: python -m pip install --no-deps --ignore-installed .
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vvv
 
 requirements:
   host:
     - python
     - pip
+    - setuptools
+    - wheel
   run:
     - python
 
+  {% set skip_tests = "" %}
+  # Broken test: Compares current machine time with copyright notice's old year
+  {% set skip_tests = skip_tests + " --deselect=tests/test_daterange.py::DateRangeTest::test__daterange" %}
+  # Test is pointless for packaging, it only checks for presence of repo files (readme, etc).
+  {% set skip_tests = skip_tests + " --deselect=tests/test_repofiles.py::RepoFiles::test_file_existence" %}
+
 test:
+  source_files:
+    - tests
+  requires:
+    - python
+    - pip
+    - pytest
   imports:
     - python_http_client
+  commands:
+    - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - pytest -vv {{ skip_tests }} tests
 
 about:
-  home: https://github.com/sendgrid/sendgrid-python/
+  home: https://sendgrid.com
   license: MIT
   license_family: MIT
-  # https://github.com/sendgrid/python-http-client/pull/87
-  license_file: '{{ environ["RECIPE_DIR"] }}/LICENSE.txt'
-  summary: "SendGrid's Python HTTP Client for calling APIs"
-  description: "Quickly and easily access any RESTful or RESTful-like API"
-  doc_url: 'https://github.com/sendgrid/python-http-client'
-  dev_url: 'https://github.com/sendgrid/python-http-client'
+  license_file: LICENSE
+  summary: Twilio SendGrid's Python HTTP Client for calling APIs
+  description: Quickly and easily access any RESTful or RESTful-like API
+  doc_url: https://github.com/sendgrid/python-http-client
+  dev_url: https://github.com/sendgrid/python-http-client
 
 extra:
   recipe-maintainers:
